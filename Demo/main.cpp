@@ -3,6 +3,10 @@
 #include <rapidjson/document.h>
 #include <sstream>
 #include <fstream>
+#include <iostream>
+#include <boost/sort/sort.hpp>
+#include <algorithm>
+#include <vector>
 
 using namespace std;
 
@@ -60,24 +64,33 @@ void draw(rapidjson::Document& doc, cv::Mat& img)
 
 int main(int argc, char** argv) 
 {
-	fstream f("line.json");
-	stringstream ss;
-	ss << f.rdbuf();
-	rapidjson::Document doc;
-	doc.Parse(ss.str().c_str());
-
-	cv::Mat img = cv::imread("G:\\test.jpg");
-	if (img.empty()) 
+	vector<int> arr;
+	while (arr.size() < 100)
 	{
-		std::cout << "could not load image..." << std::endl;
-		return -1;
+		arr.push_back(std::rand());
 	}
-	std::cout << "Width: " << img.cols << ", Height: " << img.rows << std::endl;
+	boost::sort::block_indirect_sort(std::begin(arr), std::end(arr));
+	for_each(std::begin(arr), std::end(arr), [](int& a) {cout << a << "\t";	});
 
-	draw(doc, img);
-	cv::namedWindow("input image", cv::WINDOW_AUTOSIZE);
-	cv::imshow("input image", img);
+	//fstream f("line.json");
+	//stringstream ss;
+	//ss << f.rdbuf();
+	//rapidjson::Document doc;
+	//doc.Parse(ss.str().c_str());
 
-	cv::waitKey(0);
+	//cv::Mat img = cv::imread("G:\\test.jpg");
+	//if (img.empty()) 
+	//{
+	//	std::cout << "could not load image..." << std::endl;
+	//	return -1;
+	//}
+	//std::cout << "Width: " << img.cols << ", Height: " << img.rows << std::endl;
+
+	//draw(doc, img);
+	//cv::namedWindow("input image", cv::WINDOW_AUTOSIZE);
+	//cv::imshow("input image", img);
+
+	//cv::waitKey(0);
 	return 0;
 }
+
